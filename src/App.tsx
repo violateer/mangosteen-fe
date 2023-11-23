@@ -2,16 +2,23 @@ import { defineComponent, ref } from "vue";
 
 export const App = defineComponent({
   setup() {
-    const count = ref(0);
-    const onClick = () => {
-      count.value++;
-    };
     return () => (
       <>
-        <div>{count.value}</div>
+        <header>
+          导航
+          <ul>
+            <li>
+              <router-link to="/">Foo</router-link>
+            </li>
+            <li>
+              <router-link to="/about">Bar</router-link>
+            </li>
+          </ul>
+        </header>
         <div>
-          <button onClick={onClick}>+1</button>
+          <router-view></router-view>
         </div>
+        <footer>页脚</footer>
       </>
     );
   },
