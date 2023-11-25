@@ -1,6 +1,5 @@
 import { defineComponent, ref } from "vue";
 import s from "./WelcomeLayout.module.scss";
-import { RouterLink } from "vue-router";
 
 export const WelcomeLayout = defineComponent({
   setup(props, { slots }) {
