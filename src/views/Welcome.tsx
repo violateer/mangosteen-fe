@@ -44,8 +44,6 @@ export const Welcome = defineComponent({
         <main class={s.main} ref={main}>
           <RouterView name="main">
             {({ Component: comp }: Params) => {
-              console.log(comp);
-
               return (
                 <Transition
                   enterFromClass={s.slide_fade_enter_from}
