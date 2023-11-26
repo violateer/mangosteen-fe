@@ -9,8 +9,10 @@ export const StartPage = defineComponent({
     };
     return () => (
       <div>
-        <div class={s.button_wrapper} onClick={onClick}>
-          <Button class={s.button}>测试</Button>
+        <div class={s.button_wrapper}>
+          <Button class={s.button} onClick={onClick}>
+            测试
+          </Button>
         </div>
       </div>
     );
