@@ -7,6 +7,7 @@ import { Icon } from "../shared/Icon";
 import { Navbar } from "../shared/Navbar";
 import { Overlay } from "../shared/Overlay";
 import { RouterLink } from "vue-router";
+import { MainLayout } from "../layouts/MainLayout";
 
 export const StartPage = defineComponent({
   setup(props, context) {
@@ -15,27 +16,29 @@ export const StartPage = defineComponent({
       overlayVisible.value = !overlayVisible.value;
     };
     return () => (
-      <div>
-        <Navbar>
-          {{
-            default: () => "山竹记账",
-            icon: () => (
-              <Icon name="menu" class={s.navIcon} onClick={toggleMenu} />
-            ),
-          }}
-        </Navbar>
-        <Center class={s.pig_wrapper}>
-          <Icon name="pig" class={s.pig} />
-        </Center>
-        <div class={s.button_wrapper}>
-          <RouterLink to="/items/create">
-            <Button class={s.button}>开始记账</Button>
-            <FloatButton></FloatButton>
-          </RouterLink>
+      <MainLayout>
+        {{
+          title: () => "山竹记账",
+          icon: () => (
+            <Icon name="menu" class={s.navIcon} onClick={toggleMenu} />
+          ),
+          default: () => (
+            <>
+              <Center class={s.pig_wrapper}>
+                <Icon name="pig" class={s.pig} />
+              </Center>
+              <div class={s.button_wrapper}>
+                <RouterLink to="/items/create">
+                  <Button class={s.button}>开始记账</Button>
+                  <FloatButton></FloatButton>
+                </RouterLink>
 
-          {overlayVisible.value && <Overlay onClose={toggleMenu} />}
-        </div>
-      </div>
+                {overlayVisible.value && <Overlay onClose={toggleMenu} />}
+              </div>
+            </>
+          ),
+        }}
+      </MainLayout>
     );
   },
 });
