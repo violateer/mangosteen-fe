@@ -14,11 +14,11 @@ export const InputPad = defineComponent({
   setup: (props, context) => {
     const appendText = (n: number | string) => {
       const nString = n.toString();
-      const dotIndex = refAmount.value.indexOf(".");
-      if (refAmount.value.length >= 13) {
+      const dotIndex = amount.value.indexOf(".");
+      if (amount.value.length >= 13) {
         return;
       }
-      if (dotIndex >= 0 && refAmount.value.length - dotIndex > 2) {
+      if (dotIndex >= 0 && amount.value.length - dotIndex > 2) {
         return;
       }
       if (nString === ".") {
@@ -27,19 +27,17 @@ export const InputPad = defineComponent({
           return;
         }
       } else if (nString === "0") {
-        if (dotIndex === -1) {
-          // 没有小数点
-          if (refAmount.value === "0") {
-            // 没小数点，但是有0
-            return;
-          }
+        // 没有小数点
+        if (amount.value === "0") {
+          // 没小数点，但是有0
+          return;
         }
       } else {
-        if (refAmount.value === "0") {
-          refAmount.value = "";
+        if (amount.value === "0") {
+          amount.value = "";
         }
       }
-      refAmount.value += n.toString();
+      amount.value += n.toString();
     };
     const buttons = [
       {
@@ -111,38 +109,35 @@ export const InputPad = defineComponent({
       {
         text: "清空",
         onClick: () => {
-          refAmount.value = "0";
+          amount.value = "0";
         },
       },
       {
         text: "提交",
         onClick: () => {
-          context.emit("update:amount", parseFloat(refAmount.value) * 100);
+          context.emit("update:amount", parseFloat(amount.value) * 100);
           props.onSubmit?.();
         },
       },
     ];
-    const refDatePickerVisible = ref(false);
-    const showDatePicker = () => (refDatePickerVisible.value = true);
-    const hideDatePicker = () => (refDatePickerVisible.value = false);
+    const datePickerVisible = ref(false);
+    const toggleDatePicker = () =>
+      (datePickerVisible.value = !datePickerVisible.value);
     const setDate = (date: Date) => {
       context.emit("update:happenAt", date.toISOString());
-      hideDatePicker();
+      toggleDatePicker();
     };
-    const refAmount = ref(props.amount ? (props.amount / 100).toString() : "0");
+    const amount = ref(props.amount ? (props.amount / 100).toString() : "0");
     return () => (
       <>
         <div class={s.dateAndAmount}>
           <span class={s.date}>
             <Icon name="date" class={s.icon} />
             <span>
-              <span onClick={showDatePicker}>
+              <span onClick={toggleDatePicker}>
                 {new Time(props.happenAt).format()}
               </span>
-              <Popup
-                position="bottom"
-                v-model:show={refDatePickerVisible.value}
-              >
+              <Popup position="bottom" v-model:show={datePickerVisible.value}>
                 <DatetimePicker
                   modelValue={
                     props.happenAt ? new Date(props.happenAt) : new Date()
@@ -150,12 +145,12 @@ export const InputPad = defineComponent({
                   type="date"
                   title="选择年月日"
                   onConfirm={setDate}
-                  onCancel={hideDatePicker}
+                  onCancel={toggleDatePicker}
                 />
               </Popup>
             </span>
           </span>
-          <span class={s.amount}>{refAmount.value}</span>
+          <span class={s.amount}>{amount.value}</span>
         </div>
         <div class={s.buttons}>
           {buttons.map((button) => (
