@@ -38,5 +38,10 @@
     margin-top: 4px;
     color: var(--error-color);
     font-size: 12px;
+
+    .errorText {
+      display: block;
+      height: 16px;
+    }
   }
 }

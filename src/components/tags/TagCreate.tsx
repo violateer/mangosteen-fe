@@ -4,6 +4,7 @@ import { MainLayout } from "../../layouts/MainLayout";
 import { Icon } from "../../shared/Icon";
 import { Button } from "../../shared/Button";
 import { EmojiSelect } from "../../shared/EmojiSelect";
+import { Rules, resetErrors, validate } from "../../shared/validate";
 
 export const TagCreate = defineComponent({
   props: {
@@ -16,25 +17,29 @@ export const TagCreate = defineComponent({
       name: "",
       sign: "",
     });
+    const errors = reactive<{ [k in keyof typeof formData]?: string[] }>({});
 
     const onSubmit = (e: Event) => {
       e.preventDefault();
 
-      const rules = [
+      const rules: Rules<typeof formData> = [
         {
           key: "name",
-          required: true,
+          type: "required",
           message: "必填",
         },
         {
           key: "name",
-          pattern: /^.{1,4}$/,
+          type: "pattern",
+          regex: /^.{1,4}$/,
           message: "只能填1~4个字符",
         },
-        { key: "sign", required: true, message: "必填" },
+        { key: "sign", type: "required", message: "必填" },
       ];
-      // const errors = validate(formData);
-      console.log(toRaw(formData));
+
+      resetErrors(errors);
+      Object.assign(errors, validate(formData, rules));
+      console.log(errors);
     };
 
     return () => (
@@ -54,7 +59,9 @@ export const TagCreate = defineComponent({
                     ></input>
                   </div>
                   <div class={s.formItem_errorHint}>
-                    {/* <span>{errors["name"][0]}</span> */}
+                    <span>
+                      {errors["name"] ? errors["name"][0] : <span class={s.errorText}></span>}
+                    </span>
                   </div>
                 </label>
               </div>
@@ -68,7 +75,9 @@ export const TagCreate = defineComponent({
                     />
                   </div>
                   <div class={s.formItem_errorHint}>
-                    <span>必填</span>
+                    <span>
+                      {errors["sign"] ? errors["sign"][0] : <span class={s.errorText}></span>}
+                    </span>
                   </div>
                 </label>
               </div>
