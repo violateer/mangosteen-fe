@@ -1,13 +1,11 @@
-import { PropType, defineComponent, ref } from "vue";
-import s from "./MainLayout.module.scss";
+import { defineComponent, PropType } from "vue";
 import { Navbar } from "../shared/Navbar";
-import { Icon } from "../shared/Icon";
-
+import s from "./MainLayout.module.scss";
 export const MainLayout = defineComponent({
-  setup(props, context) {
+  setup: (props, context) => {
     return () => (
-      <div class={s.wrapper}>
-        <Navbar class={s.navbar}>
+      <div>
+        <Navbar>
           {{
             default: () => context.slots.title?.(),
             icon: () => context.slots.icon?.(),

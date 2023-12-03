@@ -1,5 +1,5 @@
 import { PropType, defineComponent, reactive, ref, toRaw } from "vue";
-import s from "./TagCreate.module.scss";
+import s from "./Tag.module.scss";
 import { MainLayout } from "../../layouts/MainLayout";
 import { Icon } from "../../shared/Icon";
 import { Button } from "../../shared/Button";
@@ -60,7 +60,11 @@ export const TagCreate = defineComponent({
                   </div>
                   <div class={s.formItem_errorHint}>
                     <span>
-                      {errors["name"] ? errors["name"][0] : <span class={s.errorText}></span>}
+                      {errors["name"] ? (
+                        errors["name"][0]
+                      ) : (
+                        <span class={s.errorText}></span>
+                      )}
                     </span>
                   </div>
                 </label>
@@ -76,7 +80,11 @@ export const TagCreate = defineComponent({
                   </div>
                   <div class={s.formItem_errorHint}>
                     <span>
-                      {errors["sign"] ? errors["sign"][0] : <span class={s.errorText}></span>}
+                      {errors["sign"] ? (
+                        errors["sign"][0]
+                      ) : (
+                        <span class={s.errorText}></span>
+                      )}
                     </span>
                   </div>
                 </label>

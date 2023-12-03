@@ -1,18 +1,20 @@
 .tabs {
+  position: relative;
   &_nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: center;
     color: var(--navbar-text);
+    position: sticky;
+    z-index: 1;
+    top: 0;
 
     > li {
       flex-grow: 1;
       flex-shrink: 0;
       padding: 12px 0;
       background: var(--navbar-bg-end);
-      transition: all 250ms;
-
       &.selected {
         position: relative;
         &::after {
@@ -23,7 +25,7 @@
           left: 0;
           width: 100%;
           height: 4px;
-          background-color: var(--tabs-indicator-bg);
+          background: var(--tabs-indicator-bg);
         }
       }
     }
