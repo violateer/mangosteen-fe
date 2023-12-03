@@ -1,4 +1,4 @@
-import { PropType, defineComponent, reactive, ref } from "vue";
+import { PropType, defineComponent, reactive, ref, toRaw } from "vue";
 import s from "./TagCreate.module.scss";
 import { MainLayout } from "../../layouts/MainLayout";
 import { Icon } from "../../shared/Icon";
@@ -14,8 +14,28 @@ export const TagCreate = defineComponent({
   setup(props, context) {
     const formData = reactive({
       name: "",
-      sign: "__",
+      sign: "",
     });
+
+    const onSubmit = (e: Event) => {
+      e.preventDefault();
+
+      const rules = [
+        {
+          key: "name",
+          required: true,
+          message: "必填",
+        },
+        {
+          key: "name",
+          pattern: /^.{1,4}$/,
+          message: "只能填1~4个字符",
+        },
+        { key: "sign", required: true, message: "必填" },
+      ];
+      // const errors = validate(formData);
+      console.log(toRaw(formData));
+    };
 
     return () => (
       <MainLayout>
@@ -23,7 +43,7 @@ export const TagCreate = defineComponent({
           title: () => "新建标签",
           icon: () => <Icon name="left" onClick={() => {}} />,
           default: () => (
-            <form class={s.form}>
+            <form class={s.form} onSubmit={onSubmit}>
               <div class={s.formRow}>
                 <label class={s.formLabel}>
                   <span class={s.formItem_name}>标签名</span>
@@ -34,7 +54,7 @@ export const TagCreate = defineComponent({
                     ></input>
                   </div>
                   <div class={s.formItem_errorHint}>
-                    <span>必填</span>
+                    {/* <span>{errors["name"][0]}</span> */}
                   </div>
                 </label>
               </div>
