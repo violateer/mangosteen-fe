@@ -1,7 +1,6 @@
-import { PropType, defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive } from "vue";
 import s from "./Tag.module.scss";
 import { Button } from "../../shared/Button";
-import { EmojiSelect } from "../../shared/EmojiSelect";
 import { Rules, resetErrors, validate } from "../../shared/validate";
 import { Form, FormItem } from "../../shared/Form";
 

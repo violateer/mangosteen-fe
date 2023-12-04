@@ -18,3 +18,16 @@
     }
   }
 }
+.actions {
+  text-align: right;
+  button {
+    border: none;
+    background: transparent;
+    padding: 8px 16px;
+
+    &[type="submit"] {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+    }
+  }
+}
