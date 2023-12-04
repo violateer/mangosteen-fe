@@ -30,7 +30,7 @@ export const StartPage = defineComponent({
               <div class={s.button_wrapper}>
                 <RouterLink to="/items/create">
                   <Button class={s.button}>开始记账</Button>
-                  <FloatButton></FloatButton>
+                  <FloatButton iconName="add"></FloatButton>
                 </RouterLink>
 
                 {overlayVisible.value && <Overlay onClose={toggleMenu} />}
