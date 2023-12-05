@@ -51,7 +51,11 @@ export const ItemList = defineComponent({
               <Tabs
                 classPrefix="customTabs"
                 v-model:selected={selected.value}
-                onUpdate:selected={() => (overlayVisible.value = true)}
+                onUpdate:selected={(value: string) => {
+                  if (value == "自定义时间") {
+                    overlayVisible.value = true;
+                  }
+                }}
               >
                 <Tab name="本月">
                   <ItemSummary
