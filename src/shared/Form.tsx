@@ -33,6 +33,7 @@ export const FormItem = defineComponent({
       type: String,
     },
   },
+  emits: ["update:modelValue"],
   setup: (props, context) => {
     const dateVisible = ref(false);
     const content = computed(() => {
