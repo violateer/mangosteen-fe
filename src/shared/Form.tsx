@@ -3,6 +3,7 @@ import { EmojiSelect } from "./EmojiSelect";
 import s from "./Form.module.scss";
 import { DatetimePicker, Popup } from "vant";
 import { Time } from "./time";
+import { Button } from "./Button";
 export const Form = defineComponent({
   props: {
     onSubmit: {
@@ -27,7 +28,9 @@ export const FormItem = defineComponent({
       type: [String, Number],
     },
     type: {
-      type: String as PropType<"text" | "emojiSelect" | "date">,
+      type: String as PropType<
+        "text" | "emojiSelect" | "date" | "validationcode"
+      >,
     },
     error: {
       type: String,
@@ -45,7 +48,7 @@ export const FormItem = defineComponent({
               onInput={(e: any) =>
                 context.emit("update:modelValue", e.target.value)
               }
-              class={[s.formItem, s.input, s.error]}
+              class={[s.formItem, s.input]}
             />
           );
         case "emojiSelect":
@@ -55,8 +58,21 @@ export const FormItem = defineComponent({
               onUpdateModelValue={(value) =>
                 context.emit("update:modelValue", value)
               }
-              class={[s.formItem, s.emojiList, s.error]}
+              class={[s.formItem, s.emojiList]}
             />
+          );
+        case "validationcode":
+          return (
+            <>
+              <input
+                value={props.modelValue}
+                onInput={(e: any) =>
+                  context.emit("update:modelValue", e.target.value)
+                }
+                class={[s.formItem, s.input, s.validationcodeInput]}
+              />
+              <Button class={[s.formItem, s.validationcodeButton]}>提交</Button>
+            </>
           );
         case "date":
           return (
@@ -93,11 +109,11 @@ export const FormItem = defineComponent({
           <label class={s.formLabel}>
             {props.label && <span class={s.formItem_name}>{props.label}</span>}
             <div class={s.formItem_value}>{content.value}</div>
-            {props.error && (
+            {
               <div class={s.formItem_errorHint}>
-                <span>{props.error}</span>
+                <span>{props.error ?? "　"}</span>
               </div>
-            )}
+            }
           </label>
         </div>
       );

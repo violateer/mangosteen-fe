@@ -27,8 +27,14 @@
     }
   }
 
-  &_name {
+  &.validationcodeInput {
+    flex-grow: 0;
+    width: 8em;
   }
+  &.validationcodeButton {
+    margin-left: 16px;
+  }
+
   &_value {
     display: flex;
     margin-top: 4px;
