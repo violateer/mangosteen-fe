@@ -5,7 +5,7 @@ import { FloatButton } from "../shared/FloatButton";
 import { Center } from "../shared/Center";
 import { Icon } from "../shared/Icon";
 import { Navbar } from "../shared/Navbar";
-import { Overlay } from "../shared/Overlay";
+import { Overlay, OverlayIcon } from "../shared/Overlay";
 import { RouterLink } from "vue-router";
 import { MainLayout } from "../layouts/MainLayout";
 
@@ -19,9 +19,7 @@ export const StartPage = defineComponent({
       <MainLayout>
         {{
           title: () => "山竹记账",
-          icon: () => (
-            <Icon name="menu" class={s.navIcon} onClick={toggleMenu} />
-          ),
+          icon: () => <OverlayIcon />,
           default: () => (
             <>
               <Center class={s.pig_wrapper}>
@@ -32,8 +30,6 @@ export const StartPage = defineComponent({
                   <Button class={s.button}>开始记账</Button>
                   <FloatButton iconName="add"></FloatButton>
                 </RouterLink>
-
-                {overlayVisible.value && <Overlay onClose={toggleMenu} />}
               </div>
             </>
           ),

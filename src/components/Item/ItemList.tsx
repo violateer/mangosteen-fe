@@ -7,6 +7,7 @@ import { ItemSummary } from "./ItemSummary";
 import { Time } from "../../shared/time";
 import { Overlay } from "vant";
 import { Form, FormItem } from "../../shared/Form";
+import { OverlayIcon } from "../../shared/Overlay";
 
 export const ItemList = defineComponent({
   props: {
@@ -45,7 +46,7 @@ export const ItemList = defineComponent({
       <MainLayout>
         {{
           title: () => "山竹记账",
-          icon: () => <Icon name="menu" />,
+          icon: () => <OverlayIcon />,
           default: () => (
             <>
               <Tabs
