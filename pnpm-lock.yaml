@@ -33,6 +33,9 @@ dependencies:
     version: 4.0.14(vue@3.2.31)
 
 devDependencies:
+  '@types/echarts':
+    specifier: 4.9.22
+    version: 4.9.22
   '@vant/auto-import-resolver':
     specifier: 1.0.2
     version: 1.0.2
@@ -475,8 +478,18 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
+  /@types/echarts@4.9.22:
+    resolution: {integrity: sha512-7Fo6XdWpoi8jxkwP7BARUOM7riq8bMhmsCtSG8gzUcJmFhLo387tihoBYS/y5j7jl3PENT5RxeWZdN9RiwO7HQ==}
+    dependencies:
+      '@types/zrender': 4.0.6
+    dev: true
+
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+    dev: true
+
+  /@types/zrender@4.0.6:
+    resolution: {integrity: sha512-1jZ9bJn2BsfmYFPBHtl5o3uV+ILejAtGrDcYSpT4qaVKEI/0YY+arw3XHU04Ebd8Nca3SQ7uNcLaqiL+tTFVMg==}
     dev: true
 
   /@vant/auto-import-resolver@1.0.2:
