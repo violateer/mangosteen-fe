@@ -22,6 +22,7 @@ export const SignInPage = defineComponent({
       email: [],
       code: [],
     });
+    const refValidationCode = ref<any>();
 
     const onSubmit = (e: Event) => {
       e.preventDefault();
@@ -46,9 +47,16 @@ export const SignInPage = defineComponent({
     };
 
     const onClickSendValidationCode = async () => {
-      // const res = await axios.post("/api/v1/validation_codes", {
-      //   email: formData.email,
-      // });
+      const res = await axios
+        .post("/api/v1/validation_codes", {
+          email: formData.email,
+        })
+        .catch((e) => {
+          // 失败
+        });
+
+      // 成功
+      refValidationCode.value.startCount();
     };
 
     return () => (
@@ -71,6 +79,7 @@ export const SignInPage = defineComponent({
                   placeholder="请输入邮箱，然后点击发送验证码"
                 />
                 <FormItem
+                  ref={refValidationCode}
                   label="验证码"
                   type="validationcode"
                   v-model={formData.code}
