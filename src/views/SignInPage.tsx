@@ -5,6 +5,7 @@ import { Icon } from "../shared/Icon";
 import { Form, FormItem } from "../shared/Form";
 import { Button } from "../shared/Button";
 import { Rules, resetErrors, validate } from "../shared/validate";
+import axios from "axios";
 
 export const SignInPage = defineComponent({
   props: {
@@ -44,10 +45,11 @@ export const SignInPage = defineComponent({
       Object.assign(errors, validate(formData, rules));
     };
 
-    const onClickSendValidationCode = () => {
-      console.log(123);
-      
-    }
+    const onClickSendValidationCode = async () => {
+      // const res = await axios.post("/api/v1/validation_codes", {
+      //   email: formData.email,
+      // });
+    };
 
     return () => (
       <MainLayout>
