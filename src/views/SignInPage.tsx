@@ -6,6 +6,7 @@ import { Form, FormItem } from "../shared/Form";
 import { Button } from "../shared/Button";
 import { Rules, resetErrors, validate } from "../shared/validate";
 import axios from "axios";
+import { http } from "../shared/Http";
 
 export const SignInPage = defineComponent({
   props: {
@@ -15,7 +16,7 @@ export const SignInPage = defineComponent({
   },
   setup(props, context) {
     const formData = reactive({
-      email: "",
+      email: "1828257089@qq.com",
       code: "",
     });
     const errors = reactive({
@@ -47,7 +48,7 @@ export const SignInPage = defineComponent({
     };
 
     const onClickSendValidationCode = async () => {
-      const res = await axios
+      const res = await http
         .post("/api/v1/validation_codes", {
           email: formData.email,
         })
