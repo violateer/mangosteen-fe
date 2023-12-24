@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 export class Http {
   instance: AxiosInstance;
@@ -62,3 +62,18 @@ export class Http {
 }
 
 export const http = new Http("/api/v1");
+
+// 拦截器
+http.instance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    const axiosError = error as AxiosError;
+    if (axiosError.response?.status === 429) {
+      alert("请求太频繁！");
+    }
+
+    throw error;
+  }
+);

@@ -47,16 +47,19 @@ export const SignInPage = defineComponent({
       Object.assign(errors, validate(formData, rules));
     };
 
+    const onError = (error: any) => {
+      if (error.response.status === 422) {
+        Object.assign(errors, error.response.data.errors);
+        throw error; // 如果不throw，await就会判断为请求成功
+      }
+    };
     const onClickSendValidationCode = async () => {
       const res = await http
-        .post("/api/v1/validation_codes", {
+        .post("/validation_codes", {
           email: formData.email,
         })
-        .catch((e) => {
-          // 失败
-        });
+        .catch((error) => onError(error));
 
-      // 成功
       refValidationCode.value.startCount();
     };
 
