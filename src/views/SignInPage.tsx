@@ -7,6 +7,7 @@ import { Button } from "../shared/Button";
 import { Rules, resetErrors, validate } from "../shared/validate";
 import axios from "axios";
 import { http } from "../shared/Http";
+import { useBool } from "../hooks/useBool";
 
 export const SignInPage = defineComponent({
   props: {
@@ -16,7 +17,7 @@ export const SignInPage = defineComponent({
   },
   setup(props, context) {
     const formData = reactive({
-      email: "1828257089@qq.com",
+      email: "",
       code: "",
     });
     const errors = reactive({
@@ -24,6 +25,7 @@ export const SignInPage = defineComponent({
       code: [],
     });
     const refValidationCode = ref<any>();
+    const { ref: refDisabled, toggle, on, off } = useBool(false);
 
     const onSubmit = (e: Event) => {
       e.preventDefault();
@@ -54,11 +56,13 @@ export const SignInPage = defineComponent({
       }
     };
     const onClickSendValidationCode = async () => {
+      on();
       const res = await http
         .post("/validation_codes", {
           email: formData.email,
         })
-        .catch((error) => onError(error));
+        .catch((error) => onError(error))
+        .finally(off);
 
       refValidationCode.value.startCount();
     };
@@ -89,6 +93,7 @@ export const SignInPage = defineComponent({
                   v-model={formData.code}
                   error={errors.code?.[0]}
                   placeholder="请输入六位数字"
+                  disabled={refDisabled.value}
                   onClick={onClickSendValidationCode}
                 />
                 <FormItem class={s.signInBtn}>
