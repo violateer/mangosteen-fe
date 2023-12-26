@@ -45,3 +45,18 @@ export const resetErrors = (errors: { [k in keyof FData]?: string[] }) => {
     errors[key] = undefined;
   });
 };
+
+function isEmpty(value: null | undefined | string | number | FData) {
+  return value === null || value === undefined || value === "";
+}
+
+export const hasError = (errors: { [k in keyof FData]?: string[] }) => {
+  let result = false;
+  for (let key in errors) {
+    if (errors[key]?.length! > 0) {
+      result = true;
+      break;
+    }
+  }
+  return result;
+};

@@ -4,7 +4,7 @@ import { MainLayout } from "../layouts/MainLayout";
 import { Icon } from "../shared/Icon";
 import { Form, FormItem } from "../shared/Form";
 import { Button } from "../shared/Button";
-import { Rules, resetErrors, validate } from "../shared/validate";
+import { Rules, hasError, resetErrors, validate } from "../shared/validate";
 import axios from "axios";
 import { http } from "../shared/Http";
 import { useBool } from "../hooks/useBool";
@@ -27,9 +27,7 @@ export const SignInPage = defineComponent({
     const refValidationCode = ref<any>();
     const { ref: refDisabled, toggle, on, off } = useBool(false);
 
-    const onSubmit = (e: Event) => {
-      e.preventDefault();
-
+    const onSubmit = async (e: Event) => {
       const rules: Rules<typeof formData> = [
         {
           key: "email",
@@ -47,6 +45,11 @@ export const SignInPage = defineComponent({
 
       resetErrors(errors);
       Object.assign(errors, validate(formData, rules));
+
+      if (!hasError(errors)) {
+        const res = await http.post<{ jwt: string }>("/session", formData);
+        localStorage.setItem("jwt", res.data.jwt);
+      }
     };
 
     const onError = (error: any) => {
@@ -78,7 +81,7 @@ export const SignInPage = defineComponent({
                 <Icon class={s.icon} name="mangosteen"></Icon>
                 <h1 class={s.appName}>山竹记账</h1>
               </div>
-              <Form onSubmit={onSubmit}>
+              <Form>
                 <FormItem
                   label="邮箱地址"
                   type="text"
@@ -97,7 +100,9 @@ export const SignInPage = defineComponent({
                   onClick={onClickSendValidationCode}
                 />
                 <FormItem class={s.signInBtn}>
-                  <Button>登录</Button>
+                  <Button type="submit" onClick={onSubmit}>
+                    登录
+                  </Button>
                 </FormItem>
               </Form>
             </div>

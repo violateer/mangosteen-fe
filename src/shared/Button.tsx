@@ -35,7 +35,7 @@ export const Button = defineComponent({
         return props.disabled;
       }
     });
-    const onClick = () => {
+    const onClick = async () => {
       selfDisabled.value = true;
       setTimeout(() => {
         selfDisabled.value = false;
