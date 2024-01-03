@@ -5,9 +5,9 @@ import { Icon } from "../shared/Icon";
 import { Form, FormItem } from "../shared/Form";
 import { Button } from "../shared/Button";
 import { Rules, hasError, resetErrors, validate } from "../shared/validate";
-import axios from "axios";
 import { http } from "../shared/Http";
 import { useBool } from "../hooks/useBool";
+import { useRoute, useRouter } from "vue-router";
 
 export const SignInPage = defineComponent({
   props: {
@@ -26,6 +26,8 @@ export const SignInPage = defineComponent({
     });
     const refValidationCode = ref<any>();
     const { ref: refDisabled, toggle, on, off } = useBool(false);
+    const router = useRouter();
+    const route = useRoute();
 
     const onSubmit = async (e: Event) => {
       const rules: Rules<typeof formData> = [
@@ -49,6 +51,9 @@ export const SignInPage = defineComponent({
       if (!hasError(errors)) {
         const res = await http.post<{ jwt: string }>("/session", formData);
         localStorage.setItem("jwt", res.data.jwt);
+        // router.push("/sign_in?return_to="+encodeURIComponent(route.fullPath))
+        const returnTo = route.query.return_to?.toString();
+        router.push(returnTo || "/");
       }
     };
 
@@ -58,6 +63,7 @@ export const SignInPage = defineComponent({
         throw error; // 如果不throw，await就会判断为请求成功
       }
     };
+
     const onClickSendValidationCode = async () => {
       on();
       const res = await http
