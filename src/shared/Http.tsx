@@ -63,6 +63,15 @@ export class Http {
 
 export const http = new Http("/api/v1");
 
+// 请求头添加jwt
+http.instance.interceptors.request.use((config) => {
+  const jwt = localStorage.getItem("jwt");
+  if (jwt) {
+    config.headers!.Authorization = `Bearer ${jwt}`;
+  }
+  return config;
+});
+
 // 拦截器
 http.instance.interceptors.response.use(
   (response) => {
