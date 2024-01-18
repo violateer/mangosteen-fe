@@ -1,69 +1,86 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
+import { mockSession, mockTagIndex } from "../mock/mock";
+
+type GetConfig = Omit<AxiosRequestConfig, "params" | "url" | "method">;
+type PostConfig = Omit<AxiosRequestConfig, "url" | "data" | "method">;
+type PatchConfig = Omit<AxiosRequestConfig, "url" | "data">;
+type DeleteConfig = Omit<AxiosRequestConfig, "params">;
 
 export class Http {
   instance: AxiosInstance;
   constructor(baseURL: string) {
-    this.instance = axios.create({ baseURL });
+    this.instance = axios.create({
+      baseURL,
+    });
   }
-
-  get<ResponseDataType = unknown>(
+  get<R = unknown>(
     url: string,
-    query?: Record<string, string>,
-    config?: Omit<AxiosRequestConfig, "params" | "url" | "method">
+    query?: Record<string, JSONValue>,
+    config?: GetConfig
   ) {
-    return this.instance.request<ResponseDataType>({
+    return this.instance.request<R>({
       ...config,
-      url,
+      url: url,
       params: query,
       method: "get",
     });
   }
-
-  // create
-  post<ResponseDataType = unknown>(
+  post<R = unknown>(
     url: string,
     data?: Record<string, JSONValue>,
-    config?: Omit<AxiosRequestConfig, "url" | "data" | "method">
+    config?: PostConfig
   ) {
-    return this.instance.request<ResponseDataType>({
-      ...config,
-      url,
-      data,
-      method: "post",
-    });
+    return this.instance.request<R>({ ...config, url, data, method: "post" });
   }
-
-  // update
-  patch<ResponseDataType = unknown>(
+  patch<R = unknown>(
     url: string,
     data?: Record<string, JSONValue>,
-    config?: Omit<AxiosRequestConfig, "url" | "data" | "method">
+    config?: PatchConfig
   ) {
-    return this.instance.request<ResponseDataType>({
-      ...config,
-      url,
-      data,
-      method: "patch",
-    });
+    return this.instance.request<R>({ ...config, url, data, method: "patch" });
   }
-
-  delete<ResponseDataType = unknown>(
+  delete<R = unknown>(
     url: string,
     query?: Record<string, string>,
-    config?: Omit<AxiosRequestConfig, "url" | "query" | "method">
+    config?: DeleteConfig
   ) {
-    return this.instance.request<ResponseDataType>({
+    return this.instance.request<R>({
       ...config,
-      url,
+      url: url,
       params: query,
       method: "delete",
     });
   }
 }
 
+const mock = (response: AxiosResponse) => {
+  if (
+    location.hostname !== "localhost" &&
+    location.hostname !== "127.0.0.1" &&
+    location.hostname !== "192.168.3.57"
+  ) {
+    return false;
+  }
+  switch (response.config?.params?._mock) {
+    case "tagIndex":
+      [response.status, response.data] = mockTagIndex(response.config);
+      console.log("response");
+      console.log(response);
+      return true;
+    case "session":
+      [response.status, response.data] = mockSession(response.config);
+      return true;
+  }
+  return false;
+};
+
 export const http = new Http("/api/v1");
 
-// 请求头添加jwt
 http.instance.interceptors.request.use((config) => {
   const jwt = localStorage.getItem("jwt");
   if (jwt) {
@@ -72,17 +89,28 @@ http.instance.interceptors.request.use((config) => {
   return config;
 });
 
-// 拦截器
 http.instance.interceptors.response.use(
   (response) => {
+    mock(response);
     return response;
   },
   (error) => {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 429) {
-      alert("请求太频繁！");
+    if (mock(error.response)) {
+      return error.response;
+    } else {
+      throw error;
     }
-
+  }
+);
+http.instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 429) {
+        alert("你太频繁了");
+      }
+    }
     throw error;
   }
 );
